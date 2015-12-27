@@ -129,11 +129,11 @@ class CygwinCCompiler (UnixCCompiler):
 
         # Hard-code GCC because that's what this is all about.
         # XXX optimization, warnings etc. should be customizable.
-        self.set_executables(compiler='gcc -DMS_WIN64 -O -Wall',
-                             compiler_so='gcc -DMS_WIN64 -mdll -O -Wall',
-                             compiler_cxx='g++ -DMS_WIN64 -O -Wall',
-                             linker_exe='gcc -DMS_WIN64',
-                             linker_so=('%s -DMS_WIN64 %s' %
+        self.set_executables(compiler='gcc -mcygwin -O -Wall',
+                             compiler_so='gcc -mcygwin -mdll -O -Wall',
+                             compiler_cxx='g++ -mcygwin -O -Wall',
+                             linker_exe='gcc -mcygwin',
+                             linker_so=('%s -mcygwin %s' %
                                         (self.linker_dll, shared_option)))
 
         # cygwin and mingw32 need different sets of libraries
@@ -319,7 +319,11 @@ class Mingw32CCompiler (CygwinCCompiler):
         else:
             entry_point = ''
 
-        no_cygwin = ' -DMS_WIN64'
+        if self.gcc_version < '4' or is_cygwingcc():
+            no_cygwin = ' -mno-cygwin'
+        else:
+            no_cygwin = ''
+
         self.set_executables(compiler='gcc%s -O -Wall' % no_cygwin,
                              compiler_so='gcc%s -mdll -O -Wall' % no_cygwin,
                              compiler_cxx='g++%s -O -Wall' % no_cygwin,

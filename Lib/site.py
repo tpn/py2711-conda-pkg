@@ -544,9 +544,6 @@ def main():
     # this module is run as a script, because this code is executed twice.
     if hasattr(sys, "setdefaultencoding"):
         del sys.setdefaultencoding
-    if sys.platform == 'win32':
-        os.environ["PATH"] = r"%s\Library\bin;%s" % (sys.prefix,
-                                                     os.environ["PATH"])
 
 main()
 

@@ -210,16 +210,17 @@ def find_executable(executable, path=None):
     if path is None:
         path = os.environ['PATH']
     paths = path.split(os.pathsep)
+    base, ext = os.path.splitext(executable)
 
-    for ext in '.exe', '.bat', '':
-        newexe = executable + ext
+    if (sys.platform == 'win32' or os.name == 'os2') and (ext != '.exe'):
+        executable = executable + '.exe'
 
-        if os.path.isfile(newexe):
-            return newexe
-        else:
-            for p in paths:
-                f = os.path.join(p, newexe)
-                if os.path.isfile(f):
-                    # the file exists, we have a shot at spawn working
-                    return f
-    return None
+    if not os.path.isfile(executable):
+        for p in paths:
+            f = os.path.join(p, executable)
+            if os.path.isfile(f):
+                # the file exists, we have a shot at spawn working
+                return f
+        return None
+    else:
+        return executable

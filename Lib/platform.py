@@ -1315,7 +1315,6 @@ def processor():
 
 _sys_version_parser = re.compile(
     r'([\w.+]+)\s*'
-    '(?:\|[^|]*\|)?\s*' # version extra
     '\(#?([^,]+),\s*([\w ]+),\s*([\w :]+)\)\s*'
     '\[([^\]]+)\]?')
 
